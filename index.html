@@ -154,6 +154,10 @@ input:checked+.toggle-slider:before{transform:translateX(15px)}
       <div class="info-row"><span class="info-key">Fläche</span><span class="info-val" id="p-area">–</span></div>
       <div class="info-row"><span class="info-key">Neigung</span><span class="info-val" id="p-slope">–</span></div>
       <div class="info-row"><span class="info-key">Verschattung</span><span class="info-val" id="p-schatten">–</span></div>
+      <div class="info-row">
+  <span class="info-key">Ausrichtung</span>
+  <span class="info-val" id="p-aspect">–</span>
+</div>
       <div class="info-row"><span class="info-key">Gründach-Eignung</span><span class="info-val" id="p-eignung">–</span></div>
       <button class="btn-calc" onclick="openModal()">🧮 Kostenberechnung</button>
     </div>
@@ -278,6 +282,13 @@ function baumBadge(v){
     ? '<span class="badge b-orange">⚠ Ja</span>'
     : '<span class="badge b-green">Nein</span>';
 }
+function aspectRichtung(deg){
+  if(deg == null || isNaN(deg)) return '–';
+  const d = ((parseFloat(deg) % 360) + 360) % 360;
+  const richtungen = ['N','NO','O','SO','S','SW','W','NW','N'];
+  const idx = Math.round(d / 45) % 8;
+  return d.toFixed(0) + '° (' + richtungen[idx] + ')';
+}
 
 // Farbe nach NDVI-Coverage (nur ≥50% wird angezeigt)
 function ndviColor(cov){
@@ -312,6 +323,7 @@ function clickPot(p){
   document.getElementById('p-schatten').innerHTML = schattenBadge(p.schatten);
   document.getElementById('p-eignung').innerHTML  = eignungBadge(p.gruendach_eignung||p.eignung||null);
   document.getElementById('m-area').textContent   = 'Fläche: '+fmt1(currentArea)+' m²';
+  document.getElementById('p-aspect').textContent = aspectRichtung(p.aspect);
 }
 function clickNdvi(p){
   showBox('ndvi');
