@@ -110,7 +110,7 @@ input:checked+.toggle-slider:before{transform:translateX(15px)}
       <label class="layer-toggle"><input type="checkbox" id="tog-pot" onchange="toggleLayer('pot',this.checked)"><span class="toggle-slider"></span></label>
     </div>
     <div class="layer-row">
-      <label class="layer-label"><span class="layer-dot" style="background:#86efac"></span>Gründächer (NDVI ≥ 50 %)</label>
+      <label class="layer-label"><span class="layer-dot" style="background:#86efac"></span>Gründächer</label>
       <label class="layer-toggle"><input type="checkbox" id="tog-ndvi" onchange="toggleLayer('ndvi',this.checked)"><span class="toggle-slider"></span></label>
     </div>
   </div>
@@ -314,7 +314,7 @@ function clickPot(p){
 }
 function clickNdvi(p){
   showBox('ndvi');
-  const cov  = parseFloat(p.ndvicov ?? 0) * 100;       // → in %
+  const cov  = parseFloat(p.ndvicov  ?? 0) * 100;   // 0.75 → 75 %
   const mean = parseFloat(p.ndvimean ?? 0);
   const kl   = begrünungsKlasse(cov);
   document.getElementById('n-cov').textContent  = cov.toFixed(1)+' %';
