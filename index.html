@@ -281,9 +281,9 @@ function baumBadge(v){
 
 // Farbe nach NDVI-Coverage (nur ≥50% wird angezeigt)
 function ndviColor(cov){
-  const v = parseFloat(cov)||0;
-  if(v > 75) return '#166534';   // hoch  → dunkelgrün
-  return '#4ade80';              // mittel → hellgrün
+  const v = parseFloat(cov) * 100;  // ← in % umrechnen
+  if(v > 75) return '#166534';
+  return '#4ade80';
 }
 
 function eignungFill(e){
@@ -314,19 +314,23 @@ function clickPot(p){
 }
 function clickNdvi(p){
   showBox('ndvi');
-  const cov  = parseFloat(p.ndvi_coverage ?? p.ndvi_cov ?? 0);
-  const mean = parseFloat(p.ndvi_mean ?? 0);
+  const cov  = parseFloat(p.ndvicov ?? 0) * 100;       // → in %
+  const mean = parseFloat(p.ndvimean ?? 0);
   const kl   = begrünungsKlasse(cov);
   document.getElementById('n-cov').textContent  = cov.toFixed(1)+' %';
   document.getElementById('n-mean').textContent = mean ? mean.toFixed(3) : '–';
   document.getElementById('n-class').innerHTML  = '<span class="badge '+kl.cls+'">'+kl.label+'</span>';
-  document.getElementById('n-tree').innerHTML   = baumBadge(p.baum_verdacht ?? p.tree_suspect ?? false);
+  document.getElementById('n-tree').innerHTML   = baumBadge(p.baumverdacht ?? false);
 }
 
 // ── Styles ────────────────────────────────────────────────────────
 const styleAlle = ()  => ({color:'#60a5fa', weight:1,   fillColor:'#1e3a5f', fillOpacity:.45});
 const stylePot  = f   => ({color:'#34d399', weight:1.5, fillColor:eignungFill(f.properties.gruendach_eignung||f.properties.eignung), fillOpacity:.65});
-const styleNdvi = f   => ({color:'#14532d', weight:1,   fillColor:ndviColor(f.properties.ndvi_coverage??f.properties.ndvi_cov??0), fillOpacity:.85});
+const styleNdvi = f => ({
+  color:'#14532d', weight:1,
+  fillColor: ndviColor(f.properties.ndvicov ?? 0),
+  fillOpacity:.85
+});
 
 // ── Layer laden ───────────────────────────────────────────────────
 async function loadLayer(path, key, styleFn, clickFn, filterFn){
@@ -404,7 +408,7 @@ function berechne(){
   // NDVI-Filter: nur Coverage ≥ 50%
   const ndviFilter = f => {
     const cov = parseFloat(f.properties.ndvi_coverage ?? f.properties.ndvi_cov ?? 0);
-    return cov >= 50;
+    return cov >= 0.5;
   };
 
   const [alleRes, potRes, ndviRes] = await Promise.all([
