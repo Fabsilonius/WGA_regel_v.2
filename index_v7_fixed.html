@@ -110,7 +110,7 @@ input:checked+.toggle-slider:before{transform:translateX(15px)}
       <label class="layer-toggle"><input type="checkbox" id="tog-pot" onchange="toggleLayer('pot',this.checked)"><span class="toggle-slider"></span></label>
     </div>
     <div class="layer-row">
-      <label class="layer-label"><span class="layer-dot" style="background:#86efac"></span>Gründächer (NDVI ≥ 50 %)</label>
+      <label class="layer-label"><span class="layer-dot" style="background:#86efac"></span>Gründächer</label>
       <label class="layer-toggle"><input type="checkbox" id="tog-ndvi" onchange="toggleLayer('ndvi',this.checked)"><span class="toggle-slider"></span></label>
     </div>
   </div>
@@ -209,8 +209,8 @@ input:checked+.toggle-slider:before{transform:translateX(15px)}
 </div>
 
 <script>
-const TILE_CENTER = [53.5585, 10.008];
-const TILE_ZOOM   = 17;
+const TILE_CENTER = [53.502, 9.998];
+const TILE_ZOOM   = 16;
 
 // ── Basemaps ──────────────────────────────────────────────────────
 const osmTile = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
